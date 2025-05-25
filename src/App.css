@@ -1,38 +1,191 @@
+/* Base app styles */
 .App {
   text-align: center;
+  background: linear-gradient(135deg, #1f1c2c, #928dab);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #f0f0f5;
+  padding: 2rem;
+  box-sizing: border-box;
 }
 
+/* Logo styles */
 .App-logo {
-  height: 40vmin;
+  height: 60px;
+  width: 60px;
+  margin-bottom: 1rem;
   pointer-events: none;
+  filter: drop-shadow(0 0 5px #61dafb);
+  border-radius: 50%;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+    animation: App-logo-spin infinite 15s linear;
   }
 }
 
+/* Header */
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  background: rgba(40, 44, 52, 0.85);
+  border-radius: 15px;
+  padding: 2rem 3rem;
+  max-width: 600px;
+  margin: 0 auto 3rem auto;
+  box-shadow: 0 8px 24px rgba(97, 218, 251, 0.3);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  font-size: calc(14px + 1.2vmin);
+  color: #e1e1e6;
+  backdrop-filter: blur(8px);
 }
 
+/* Links with glow effect */
 .App-link {
   color: #61dafb;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+.App-link:hover,
+.App-link:focus {
+  color: #39a0ff;
+  text-shadow: 0 0 10px #39a0ff;
+  outline: none;
+  cursor: pointer;
 }
 
+/* Spinning animation */
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* Chat container style */
+.chat-container {
+  background: #22202c;
+  max-width: 600px;
+  margin: 0 auto;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  height: 70vh;
+  overflow-y: auto;
+}
+
+/* Chat bubbles */
+.chat-bubble {
+  max-width: 75%;
+  padding: 0.75rem 1rem;
+  margin: 0.5rem 0;
+  border-radius: 20px;
+  font-size: 1rem;
+  line-height: 1.4;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  word-wrap: break-word;
+  transition: background-color 0.3s ease;
+}
+
+/* User message bubble */
+.chat-bubble.user {
+  background: #61dafb;
+  color: #0f1c2c;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+/* Bot message bubble */
+.chat-bubble.bot {
+  background: #3a3f58;
+  color: #dcdde1;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+/* Input container */
+.input-container {
+  display: flex;
+  margin-top: auto;
+  gap: 1rem;
+  padding: 1rem 0 0 0;
+}
+
+/* Text input */
+.chat-input {
+  flex-grow: 1;
+  padding: 0.8rem 1rem;
+  border-radius: 30px;
+  border: none;
+  font-size: 1.1rem;
+  outline: none;
+  background: #3a3f58;
+  color: #f0f0f5;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.6);
+  transition: background-color 0.3s ease;
+}
+.chat-input::placeholder {
+  color: #b0b0c3;
+}
+.chat-input:focus {
+  background-color: #505675;
+  box-shadow: inset 0 0 10px #61dafb;
+}
+
+/* Send button */
+.send-button {
+  background: #61dafb;
+  border: none;
+  border-radius: 30px;
+  padding: 0 1.5rem;
+  color: #0f1c2c;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 0 10px #61dafb;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.send-button:hover {
+  background: #39a0ff;
+  box-shadow: 0 0 20px #39a0ff;
+}
+
+/* Scrollbar styling */
+.chat-container::-webkit-scrollbar {
+  width: 8px;
+}
+.chat-container::-webkit-scrollbar-track {
+  background: #1f1c2c;
+  border-radius: 8px;
+}
+.chat-container::-webkit-scrollbar-thumb {
+  background: #61dafb;
+  border-radius: 8px;
+  box-shadow: inset 0 0 5px #39a0ff;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .App-header {
+    padding: 1.5rem 1.5rem;
+  }
+  .chat-container {
+    height: 60vh;
+    padding: 1rem;
+  }
+  .chat-bubble {
+    font-size: 0.95rem;
+  }
+  .send-button {
+    padding: 0 1rem;
+    font-size: 1rem;
   }
 }
