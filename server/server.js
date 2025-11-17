@@ -27,7 +27,8 @@ const io = new Server(server, {
 // Constants
 const PORT = process.env.PORT || 5000;
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/newchat';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://jaideep:Sjaideep04%40@cluster0.so2bzuz.mongodb.net/chatDB?retryWrites=true&w=majority';
+
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
 
 // Ensure uploads directory exists
@@ -85,7 +86,7 @@ io.on('connection', (socket) => {
   socket.on('joinRoom', ({ sender, receiver }) => {
     const roomId = [sender, receiver].sort().join('_');
     socket.join(roomId);
-    console.log(`🗨️ Socket ${socket.id} joined chat room ${roomId}`);
+    console.log(`🗨 Socket ${socket.id} joined chat room ${roomId}`);
   });
 
   socket.on('sendMessage', (message) => {
@@ -99,25 +100,32 @@ io.on('connection', (socket) => {
 
   // Video call signaling
   socket.on('join-call', ({ roomId }) => {
-  socket.join(roomId);
+    if (!roomId || typeof roomId !== 'string') {
+      console.log('⚠ join-call called without valid roomId');
+      return;
+    }
 
-  if (!videoCallRooms[roomId]) {
-    videoCallRooms[roomId] = new Set();
-  }
+    socket.join(roomId);
 
-  // Send existing users to the new user
-  const existingUsers = Array.from(videoCallRooms[roomId]);
-  socket.emit('all-users', existingUsers);
+    if (!videoCallRooms[roomId]) {
+      videoCallRooms[roomId] = new Set();
+    }
 
-  // Notify existing users of new joiner
-  existingUsers.forEach((peerId) => {
-    socket.to(peerId).emit('user-joined', socket.id);
+    const existingUsers = Array.from(videoCallRooms[roomId]);
+    console.log(`📹 User ${socket.id} joining room ${roomId}. Existing users:`, existingUsers);
+
+    // Send existing users (except this socket) to new user
+    socket.emit('all-users', existingUsers);
+
+    // Notify existing users of the new joiner
+    existingUsers.forEach((peerId) => {
+      io.to(peerId).emit('user-joined', socket.id);
+    });
+
+    videoCallRooms[roomId].add(socket.id);
+
+    console.log(`📹 ${socket.id} joined call room ${roomId}. Total users: ${videoCallRooms[roomId].size}`);
   });
-
-  videoCallRooms[roomId].add(socket.id);
-  console.log(`📹 ${socket.id} joined call room ${roomId}. Total users: ${videoCallRooms[roomId].size}`);
-});
-
 
   // WebRTC signaling
   socket.on('webrtc-offer', ({ offer, to }) => {
@@ -142,6 +150,7 @@ io.on('connection', (socket) => {
 
         if (videoCallRooms[roomId].size === 0) {
           delete videoCallRooms[roomId];
+          console.log(`🧹 Room ${roomId} deleted as empty`);
         } else {
           console.log(`🔔 Remaining users in ${roomId}: ${videoCallRooms[roomId].size}`);
         }
