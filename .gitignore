@@ -1,1 +1,16 @@
+# Dependencies
+# Ignore all node_modules folders in the entire project
 node_modules/
+/client/node_modules
+/server/node_modules
+
+# Environment Variables
+# Ignore all .env files (sensitive configuration)
+.env
+/server/.env
+
+# Lock Files
+# Optionally, you may want to ignore these too, 
+# but usually, you want to keep 'package-lock.json' for dependency consistency.
+# package-lock.json 
+# npm-debug.log*
